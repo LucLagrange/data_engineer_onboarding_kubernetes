@@ -72,3 +72,9 @@ kubectl create namespace airbyte-ns
 ```bash
 helm install airbyte airbyte/airbyte --namespace airbyte --values ./values.prod.yaml
 ```
+
+### Todo
+- Bootstaps values.yaml files and configure as needed
+- Deploy Airbyte
+- Import sample data into a GCS Bucket
+- Setup the GCS -> BigQuery workflow
