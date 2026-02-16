@@ -148,18 +148,14 @@ global:
   # resources, such as Minikube.
   jobs:
     resources:
-      ## Example:
-      ## requests:
-      ##    memory: 256Mi
-      ##    cpu: 250m
+      requests:
+         memory: 256Mi
+         cpu: 100m
       # -- Job resource requests
-      requests: {}
-      ## Example:
-      ## limits:
-      ##    cpu: 200m
-      ##    memory: 1Gi
+      limits:
+         cpu: 200m
+         memory: 1Gi
       # -- Job resource limits
-      limits: {}
 
     local:
       volume:
@@ -557,11 +553,11 @@ server:
   resources:
       limits:
         cpu: 1000m
-        memory: 1Gi
+        memory: 2Gi
       # -- The requested resources for the server container
       requests:
-        cpu: 1000m
-        memory: 1Gi 
+        cpu: 250m
+        memory: 512Mi 
       # -- The requested resources for the server container
 
   # -- Node labels for pod assignment, see https://kubernetes.io/docs/user-guide/node-selection/
@@ -1451,7 +1447,7 @@ temporal:
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
   resources:
     requests:
-      memory: 512Mi
+      memory: 256Mi
       cpu: 50m
     # -- The requested resources for temporal pods
     limits:
