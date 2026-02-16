@@ -1448,11 +1448,11 @@ temporal:
   resources:
     requests:
       memory: 256Mi
-      cpu: 50m
+      cpu: 500m
     # -- The requested resources for temporal pods
     limits:
       memory: 1Gi
-      cpu: 100m
+      cpu: 1000m
     # -- The resources limits for temporal pods
 
   extraContainers: []
