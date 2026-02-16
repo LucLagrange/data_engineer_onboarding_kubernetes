@@ -2,6 +2,10 @@
 
 A small repository to complete the kubernetes part of the data engineer onboarding.
 
+**Note:** the instructions require Airbyte version 0.44.4, however this version is significantly older than the latest versions. This has impacts on compatibility with GKE, general stability and security. Knowing this, I choose to use the most recent version of Airbyte. 
+
+This version requires a bit more resources due to its micro-services architecture, which is why the requests/limits are not exactly configured as instructed.
+
 ## Technical specifications
 
 > **Define the workload: specify the appropriate Compute Engine VM types for this operation and determine the minimum operational resources (providing specific details).**
@@ -61,20 +65,51 @@ helm repo add airbyte https://airbytehq.github.io/helm-charts
 helm repo update
 ```
 
-3. **Create a namespace for Airbyte:**
+2. **Create a namespace for Airbyte:**
 
 ```bash
 kubectl create namespace airbyte-ns
 ```
 
+3. **Pull the ```values.yaml``` file into the repository**
+
+```bash
+mkdir airbyte
+helm show values airbyte/airbyte > ./airbyte/values.yaml
+```
+
+4. **Adjust the ```values.yaml``` file to fit your use case**
+
+- For the temporal and server pods, adjust the resources (memory and cpu). You can consider increasing the resources, because in most recents versions of Airbyte there is no webapp anymore but higher resources requirements.
+
+- For the server pod, add a snippet to change it to a loadbalancer service.
+
+PS: if your computer does not have enough resources consider increasing the ```initialDelaySeconds``` of the server liveness and readyness probes to avoid having your pod repeatedly spawnkilled.
+
 6. **Install Airbyte:**
 
 ```bash
-helm install airbyte airbyte/airbyte --namespace airbyte --values ./values.prod.yaml
+helm install airbyte airbyte/airbyte --namespace airbyte-ns --values ./airbyte/values.yaml
 ```
 
-### Todo
-- Bootstaps values.yaml files and configure as needed
-- Deploy Airbyte
-- Import sample data into a GCS Bucket
-- Setup the GCS -> BigQuery workflow
+7. **Expose Airbyte to your localhost**
+
+Use the Minikube tunnel feature with this command:
+
+```bash
+minikube tunnel
+```
+
+Keep the terminal in which you ran the command open, else the tunnel will close.
+
+8. **Use Lens to monitor your cluster**
+
+If you want to, you can use [Lens](https://lenshq.io/) to visualy monitor the cluster.
+
+Install Lens, then copy cluster configuration with:
+
+```bash
+kubectl config view --flatten
+```
+
+And then paste it into Lens, you should see your cluster appear.
